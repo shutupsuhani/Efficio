@@ -1,0 +1,18 @@
+[
+    {
+      "id": 1,
+      "name": "Admin",
+      "permissions": ["Read", "Write", "Delete"]
+    },
+    {
+      "id": 2,
+      "name": "User",
+      "permissions": ["Read"]
+    },
+    {
+      "id": 3,
+      "name": "Manager",
+      "permissions": ["Read", "Write"]
+    }
+  ]
+  

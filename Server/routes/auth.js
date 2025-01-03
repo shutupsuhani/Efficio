@@ -64,7 +64,7 @@ router.post("/login", async (req, res) => {
     res.cookie("token", token, { httpOnly: true, maxAge: 3600000 });
 
     // Respond with token
-    res.status(200).json({ status: true, message: "Login Successfully", token });
+    res.status(200).json({ status: true, message: "Login Successfully",user, token });
   } catch (error) {
     console.error("Error during login:", error);
     res.status(500).json({ message: "Internal Server Error" });

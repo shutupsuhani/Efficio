@@ -57,10 +57,16 @@ router.put("/tasks/:id", authenticate, async (req, res) => {
 // Delete a Task
 router.delete("/tasks/:id", authenticate, async (req, res) => {
   try {
-    const task = await Task.findByIdAndDelete(req.params.id);
+    // Find the task by ID and ensure it belongs to the authenticated user
+    const task = await Task.findOneAndDelete({
+      _id: req.params.id,
+      user: req.user._id, // Check if the task belongs to the logged-in user
+    });
+
     if (!task) {
-      return res.status(404).json({ message: "Task not found" });
+      return res.status(404).json({ message: "Task not found or not authorized to delete this task" });
     }
+
     res.status(200).json({ message: "Task deleted successfully" });
   } catch (err) {
     res.status(400).json({ error: err.message });

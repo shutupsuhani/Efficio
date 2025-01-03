@@ -1,0 +1,107 @@
+[
+  {
+    "id": 1,
+    "name": "John Doe",
+    "email": "johndoe@example.com",
+    "role": "Admin",
+    "department": "Cybersecurity"
+  },
+  {
+    "id": 2,
+    "name": "Jane Smith",
+    "email": "jane@example.com",
+    "role": "User",
+    "department": "Data Analytics"
+  },
+  {
+    "id": 3,
+    "name": "Mike Johnson",
+    "email": "mike@example.com",
+    "role": "Manager",
+    "department": "Cloud Computing"
+  },
+  {
+    "id": 4,
+    "name": "Alice Williams",
+    "email": "alice@example.com",
+    "role": "Admin",
+    "department": "Artificial Intelligence"
+  },
+  {
+    "id": 5,
+    "name": "Bob Brown",
+    "email": "bob@example.com",
+    "role": "User",
+    "department": "Web Development"
+  },
+  {
+    "id": 6,
+    "name": "Carol Davis",
+    "email": "carol@example.com",
+    "role": "Manager",
+    "department": "Blockchain"
+  },
+  {
+    "id": 7,
+    "name": "David Miller",
+    "email": "david@example.com",
+    "role": "Admin",
+    "department": "DevOps"
+  },
+  {
+    "id": 8,
+    "name": "Emma Wilson",
+    "email": "emma@example.com",
+    "role": "User",
+    "department": "Mobile App Development"
+  },
+  {
+    "id": 9,
+    "name": "Frank Moore",
+    "email": "frank@example.com",
+    "role": "Manager",
+    "department": "IoT (Internet of Things)"
+  },
+  {
+    "id": 10,
+    "name": "Grace Taylor",
+    "email": "grace@example.com",
+    "role": "User",
+    "department": "UI/UX Design"
+  },
+  {
+    "id": 11,
+    "name": "Henry Anderson",
+    "email": "henry@example.com",
+    "role": "Admin",
+    "department": "Machine Learning"
+  },
+  {
+    "id": 12,
+    "name": "Isabella Thomas",
+    "email": "isabella@example.com",
+    "role": "Manager",
+    "department": "Big Data"
+  },
+  {
+    "id": 13,
+    "name": "Jack Jackson",
+    "email": "jack@example.com",
+    "role": "User",
+    "department": "Game Development"
+  },
+  {
+    "id": 14,
+    "name": "Kathy White",
+    "email": "kathy@example.com",
+    "role": "Admin",
+    "department": "Embedded Systems"
+  },
+  {
+    "id": 15,
+    "name": "Leo Harris",
+    "email": "leo@example.com",
+    "role": "Manager",
+    "department": "Robotics"
+  }
+]
