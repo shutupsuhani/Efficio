@@ -15,7 +15,7 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser())
 app.use(cors({
-  origin: "http://localhost:5173", // Allow only your frontend's URL
+  origin: "https://efficio-task.netlify.app/", // Allow only your frontend's URL
   credentials: true,              // Allow cookies to be sent
   methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
   allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
