@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import Navbar from "@/components/ui/Navbar";
 import axios from "axios";
-import { Edit2Icon, DeleteIcon, MoveLeftIcon } from "lucide-react";
+import { DeleteIcon, Edit2Icon,  MoveLeftIcon } from "lucide-react";
 import { ListNumbers, Plus, Trash } from "@phosphor-icons/react";
-import { format } from "date-fns"; // Using date-fns for date formatting
+import { format } from "date-fns"; 
 import { Link } from "react-router-dom";
 
 const TaskList = () => {
@@ -15,6 +15,7 @@ const TaskList = () => {
     start_time: "",
     end_time: "",
     priority: "",
+    status: "pending",  // Default status is "Pending"
   }); // Stores the task being created or edited
   const [isEditing, setIsEditing] = useState(false); // Editing mode flag
   const [errorMessage, setErrorMessage] = useState(""); // Error message for validation
@@ -51,7 +52,7 @@ const TaskList = () => {
   };
 
   // Open modal for adding or editing
-  const openModal = (task = { _id: "", title: "", start_time: "", end_time: "", priority: "" }) => {
+  const openModal = (task = { _id: "", title: "", start_time: "", end_time: "", priority: "", status: "Pending" }) => {
     setTaskData(task);
     setIsEditing(!!task._id);
     setModalOpen(true);
@@ -60,7 +61,7 @@ const TaskList = () => {
   // Close modal
   const closeModal = () => {
     setModalOpen(false);
-    setTaskData({ _id: "", title: "", start_time: "", end_time: "", priority: "" });
+    setTaskData({ _id: "", title: "", start_time: "", end_time: "", priority: "", status: "Pending" });
     setErrorMessage(""); // Clear error message
   };
 
@@ -87,6 +88,7 @@ const TaskList = () => {
             start_time: taskData.start_time,
             end_time: taskData.end_time,
             priority: taskData.priority,
+            status: taskData.status,
           },
           {
             headers: {
@@ -109,6 +111,7 @@ const TaskList = () => {
             start_time: taskData.start_time,
             end_time: taskData.end_time,
             priority: taskData.priority,
+            status: taskData.status, // Send the status
           },
           {
             headers: {
@@ -156,7 +159,7 @@ const TaskList = () => {
   return (
     <div className="bg-white min-h-screen">
       <Navbar />
-     <Link to={'/'}> <div className="text-black p-5"><MoveLeftIcon/></div> </Link>
+      <Link to={'/'}> <div className="text-black p-5"><MoveLeftIcon/></div> </Link>
       <div className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-xl flex space-x-3 text-blue-950 font-bold">
@@ -189,6 +192,7 @@ const TaskList = () => {
                 End: {formatDateTime(task.end_time)}
                 </p>
                 <p>Priority: {task.priority}</p>
+                <p>Status: {task.status}</p> {/* Display status */}
               </div>
               <div className="flex gap-2">
                 <button
@@ -255,6 +259,17 @@ const TaskList = () => {
                 onChange={handleChange}
                 className="w-full p-3 border  text-gray-600 bg-slate-100 rounded-lg focus:ring focus:ring-blue-300"
               />
+
+              {/* Status Dropdown */}
+              <select
+                name="status"
+                value={taskData.status}
+                onChange={handleChange}
+                className="w-full p-3 border text-gray-600 bg-slate-100 rounded-lg focus:ring focus:ring-blue-300"
+              >
+                <option value="pending">Pending</option>
+                <option value="finished">Finished</option>
+              </select>
             </div>
 
             <div className="flex justify-end gap-3 mt-6">
@@ -262,7 +277,7 @@ const TaskList = () => {
                 onClick={closeModal}
                 className="bg-gray-300 text-black px-5 py-2 rounded-lg hover:bg-gray-400 transition"
               >
-                Cancel
+               <DeleteIcon/>
               </button>
 
               <button

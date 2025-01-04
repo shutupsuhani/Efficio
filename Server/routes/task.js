@@ -104,86 +104,95 @@ router.get("/tasks", authenticate, async (req, res) => {
 
 // Dashboard Statistics
 router.get("/dashboard", authenticate, async (req, res) => {
-    try {
-        const userId = req.user._id;
-    
-        const tasks = await Task.find({ user: userId });
-    
-        const totalTasks = tasks.length;
-    
-        const completedTasks = tasks.filter((task) => task.status === "finished").length;
-        const pendingTasks = totalTasks - completedTasks;
-    
-        // Percentages
-        const completedPercent = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
-        const pendingPercent = totalTasks > 0 ? (pendingTasks / totalTasks) * 100 : 0;
-    
-        // Pending tasks statistics
-        const pendingStats = tasks
-          .filter((task) => task.status === "pending")
-          .reduce(
-            (stats, task) => {
-              const now = new Date();
-              const startTime = new Date(task.start_time);
-              const endTime = new Date(task.end_time);
-    
-              const timeLapsed = Math.max(0, (now - startTime) / (1000 * 60 * 60)); // Time lapsed in hours
-              const balanceTime = Math.max(0, (endTime - now) / (1000 * 60 * 60)); // Balance time in hours
-    
-              stats.totalLapsed += timeLapsed;
-              stats.totalBalance += balanceTime;
-    
-              if (!stats.groupedByPriority[task.priority]) {
-                stats.groupedByPriority[task.priority] = { lapsed: 0, balance: 0 };
-              }
-    
-              stats.groupedByPriority[task.priority].lapsed += timeLapsed;
-              stats.groupedByPriority[task.priority].balance += balanceTime;
-    
-              return stats;
-            },
-            { totalLapsed: 0, totalBalance: 0, groupedByPriority: {} }
-          );
-    
-        // Average completion time for finished tasks
-        const finishedStats = tasks
-          .filter((task) => task.status === "finished")
-          .reduce(
-            (stats, task) => {
-              const startTime = new Date(task.start_time);
-              const endTime = new Date(task.end_time);
-    
-              const timeTaken = Math.max(0, (endTime - startTime) / (1000 * 60 * 60)); // Time taken in hours
-              stats.totalTime += timeTaken;
-              stats.count += 1;
-    
-              return stats;
-            },
-            { totalTime: 0, count: 0 }
-          );
-    
-        const averageCompletionTime =
-          finishedStats.count > 0 ? finishedStats.totalTime / finishedStats.count : 0;
-    
-        // Response data
-        const dashboardData = {
-          totalTasks,
-          completedTasks,
-          pendingTasks,
-          completedPercent: completedPercent.toFixed(2),
-          pendingPercent: pendingPercent.toFixed(2),
-          pendingStats: {
-            totalLapsed: pendingStats.totalLapsed.toFixed(2),
-            totalBalance: pendingStats.totalBalance.toFixed(2),
-            groupedByPriority: pendingStats.groupedByPriority,
-          },
-          averageCompletionTime: averageCompletionTime.toFixed(2),
-        };
-    
-        res.status(200).json(dashboardData);
-      } catch (error) {
-        res.status(500).json({ error: error.message });
-      }
+  try {
+    // Extract userId from the authenticated user (from middleware)
+    const userId = req.user._id;
+
+    // Fetch all tasks related to the user
+    const tasks = await Task.find({ user: userId });
+
+    const totalTasks = tasks.length;
+
+    // Count completed and pending tasks
+    const completedTasks = tasks.filter((task) => task.status === "finished").length;
+    const pendingTasks = totalTasks - completedTasks;
+
+    // Calculate percentages
+    const completedPercent = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
+    const pendingPercent = totalTasks > 0 ? (pendingTasks / totalTasks) * 100 : 0;
+
+    // Initialize Date object once to avoid repetition
+    const now = new Date();
+
+    // Pending tasks statistics
+    const pendingStats = tasks
+      .filter((task) => task.status === "pending")
+      .reduce(
+        (stats, task) => {
+          const startTime = new Date(task.start_time);
+          const endTime = new Date(task.end_time);
+
+          const timeLapsed = Math.max(0, (now - startTime) / (1000 * 60 * 60)); // Time lapsed in hours
+          const balanceTime = Math.max(0, (endTime - now) / (1000 * 60 * 60)); // Balance time in hours
+
+          stats.totalLapsed += timeLapsed;
+          stats.totalBalance += balanceTime;
+
+          // Grouping by task priority
+          if (!stats.groupedByPriority[task.priority]) {
+            stats.groupedByPriority[task.priority] = { lapsed: 0, balance: 0 };
+          }
+
+          stats.groupedByPriority[task.priority].lapsed += timeLapsed;
+          stats.groupedByPriority[task.priority].balance += balanceTime;
+
+          return stats;
+        },
+        { totalLapsed: 0, totalBalance: 0, groupedByPriority: {} }
+      );
+
+    // Average completion time for finished tasks
+    const finishedStats = tasks
+      .filter((task) => task.status === "finished")
+      .reduce(
+        (stats, task) => {
+          const startTime = new Date(task.start_time);
+          const endTime = new Date(task.end_time);
+
+          const timeTaken = Math.max(0, (endTime - startTime) / (1000 * 60 * 60)); // Time taken in hours
+          stats.totalTime += timeTaken;
+          stats.count += 1;
+
+          return stats;
+        },
+        { totalTime: 0, count: 0 }
+      );
+
+    const averageCompletionTime =
+      finishedStats.count > 0 ? finishedStats.totalTime / finishedStats.count : 0;
+
+    // Respond with the calculated dashboard data
+    const dashboardData = {
+      totalTasks,
+      completedTasks,
+      pendingTasks,
+      completedPercent: completedPercent.toFixed(2),
+      pendingPercent: pendingPercent.toFixed(2),
+      pendingStats: {
+        totalLapsed: pendingStats.totalLapsed.toFixed(2),
+        totalBalance: pendingStats.totalBalance.toFixed(2),
+        groupedByPriority: pendingStats.groupedByPriority,
+      },
+      averageCompletionTime: averageCompletionTime.toFixed(2),
+    };
+
+    // Send the response
+    res.status(200).json(dashboardData);
+  } catch (error) {
+    // Send a detailed error message
+    res.status(500).json({ error: error.message });
+  }
 });
+
 
 export const taskRouter = router;

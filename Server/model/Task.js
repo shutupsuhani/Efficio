@@ -10,8 +10,18 @@ const TaskSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, // Reference to the User who created the task
 });
 
+
 // Pre-save hook to calculate the total time when a task is saved or updated
 TaskSchema.pre("save", function (next) {
+  console.log("Status update:", this.status);
+  console.log("End time:", this.end_time);
+  console.log("Start time:", this.start_time);
+ 
+  if (this.start_time >= this.end_time) {
+    const error = new Error("Start time must be earlier than end time");
+    return next(error);
+  }
+
   if (this.isModified("status") && this.status === "finished" && this.end_time === this.start_time) {
     // If status is updated to finished, set end_time to current time
     this.end_time = new Date();
