@@ -17,11 +17,22 @@ app.use(cookieParser())
 app.use(cors())
 
 app.use(cors({
-  origin: "https://efficio-task.netlify.app/", // Allow only your frontend's URL
-  /*credentials: true,              // Allow cookies to be sent
+  origin: (origin, callback) => {
+    const allowedOrigins = [
+      "https://efficio-task.netlify.app",
+      "http://localhost:5173"
+    ];
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true); // Allow request
+    } else {
+      callback(new Error("Not allowed by CORS")); // Deny request
+    }
+  },
+  credentials: true, // Allow cookies to be sent
   methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
-  allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers */
+  allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
 }));
+
 
 // Routes
 app.use("/api/auth", userRouter); 
