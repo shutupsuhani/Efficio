@@ -11,7 +11,7 @@ import {
   Legend,
 } from "chart.js";
 import { Button } from "@chakra-ui/react";
-import { House } from "lucide-react";
+import { House, Loader2Icon } from "lucide-react";
 
 
 // Register required Chart.js components
@@ -38,7 +38,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
-  const {state,dispatch}=useAuth();
+  const {state}=useAuth();
   const {user}=state;
 
   useEffect(() => {
@@ -49,7 +49,7 @@ const Dashboard = () => {
 
     const fetchDashboardData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/file/dashboard", {
+        const response = await fetch("https://efficio-server.vercel.app/api/file/dashboard", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -73,7 +73,7 @@ const Dashboard = () => {
   }, [navigate]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="flex justify-center items-center"><Loader2Icon className="animate-spin"/></div>;
   }
 
   if (error) {

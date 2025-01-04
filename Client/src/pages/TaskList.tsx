@@ -1,23 +1,23 @@
 import { useState, useEffect } from "react";
 import Navbar from "@/components/ui/Navbar";
 import axios from "axios";
-import { DeleteIcon, Edit2Icon,  MoveLeftIcon } from "lucide-react";
+import { DeleteIcon, Edit2Icon, MoveLeftIcon } from "lucide-react";
 import { ListNumbers, Plus, Trash } from "@phosphor-icons/react";
-import { format } from "date-fns"; 
+import { format } from "date-fns";
 import { Link } from "react-router-dom";
 
 const TaskList = () => {
-  const [tasks, setTasks] = useState([]); // Stores all tasks
-  const [modalOpen, setModalOpen] = useState(false); // Controls modal visibility
+  const [tasks, setTasks] = useState<any[]>([]); // Store all tasks
+  const [modalOpen, setModalOpen] = useState(false); // Modal visibility flag
   const [taskData, setTaskData] = useState({
     _id: "",
     title: "",
     start_time: "",
     end_time: "",
     priority: "",
-    status: "pending",  // Default status is "Pending"
-  }); // Stores the task being created or edited
-  const [isEditing, setIsEditing] = useState(false); // Editing mode flag
+    status: "pending", // Default status
+  }); // Task data for creation or editing
+  const [isEditing, setIsEditing] = useState(false); // Edit mode flag
   const [errorMessage, setErrorMessage] = useState(""); // Error message for validation
 
   // Fetch tasks from API
@@ -29,10 +29,8 @@ const TaskList = () => {
         return;
       }
 
-      const response = await axios.get("http://localhost:3000/api/file/tasks", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      const response = await axios.get("https://efficio-server.vercel.app/api/file/tasks", {
+        headers: { Authorization: `Bearer ${token}` },
       });
       console.log("Fetched tasks:", response.data); // Debugging
       setTasks(response.data);
@@ -47,11 +45,11 @@ const TaskList = () => {
   }, []);
 
   // Handle input changes
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setTaskData({ ...taskData, [e.target.name]: e.target.value });
   };
 
-  // Open modal for adding or editing
+  // Open modal for adding or editing a task
   const openModal = (task = { _id: "", title: "", start_time: "", end_time: "", priority: "", status: "Pending" }) => {
     setTaskData(task);
     setIsEditing(!!task._id);
@@ -65,13 +63,14 @@ const TaskList = () => {
     setErrorMessage(""); // Clear error message
   };
 
+  // Save task (create or update)
   const saveTask = async () => {
     if (!taskData.title || !taskData.start_time || !taskData.end_time || !taskData.priority) {
       setErrorMessage("All fields are required");
       return;
     }
 
-    const token = localStorage.getItem("token"); // Retrieve the token
+    const token = localStorage.getItem("token");
     if (!token) {
       console.error("Authentication token is missing");
       setErrorMessage("You must be logged in to save a task.");
@@ -82,7 +81,7 @@ const TaskList = () => {
       if (isEditing) {
         // Update task
         await axios.put(
-          `http://localhost:3000/api/file/tasks/${taskData._id}`, // Use taskData._id for the update
+          `https://efficio-server.vercel.app/api/file/tasks/${taskData._id}`,
           {
             title: taskData.title,
             start_time: taskData.start_time,
@@ -92,7 +91,7 @@ const TaskList = () => {
           },
           {
             headers: {
-              Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -105,17 +104,17 @@ const TaskList = () => {
       } else {
         // Create new task
         const response = await axios.post(
-          "http://localhost:3000/api/file/tasks",
+          "https://efficio-server.vercel.app/api/file/tasks",
           {
             title: taskData.title,
             start_time: taskData.start_time,
             end_time: taskData.end_time,
             priority: taskData.priority,
-            status: taskData.status, // Send the status
+            status: taskData.status,
           },
           {
             headers: {
-              Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -128,9 +127,9 @@ const TaskList = () => {
     }
   };
 
-  const deleteTask = async (_id) => {
+  // Delete task
+  const deleteTask = async (_id: string) => {
     const token = localStorage.getItem("token");
-    console.log(_id);
     if (!token) {
       console.error("Authentication token is missing");
       setErrorMessage("You must be logged in to delete a task.");
@@ -138,10 +137,8 @@ const TaskList = () => {
     }
 
     try {
-      await axios.delete(`http://localhost:3000/api/file/tasks/${_id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      await axios.delete(`https://efficio-server.vercel.app/api/file/tasks/${_id}`, {
+        headers: { Authorization: `Bearer ${token}` },
       });
       setTasks((prevTasks) => prevTasks.filter((task) => task._id !== _id));
     } catch (err) {
@@ -151,7 +148,7 @@ const TaskList = () => {
   };
 
   // Format date-time to a human-readable format
-  const formatDateTime = (datetime) => {
+  const formatDateTime = (datetime: string) => {
     const date = new Date(datetime);
     return format(date, "PPPppp"); // Example format: 'Jan 1, 2025, 3:30:00 PM'
   };
@@ -159,7 +156,9 @@ const TaskList = () => {
   return (
     <div className="bg-white min-h-screen">
       <Navbar />
-      <Link to={'/'}> <div className="text-black p-5"><MoveLeftIcon/></div> </Link>
+      <Link to={'/'}>
+        <div className="text-black p-5"><MoveLeftIcon /></div>
+      </Link>
       <div className="container mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-xl flex space-x-3 text-blue-950 font-bold">
@@ -172,7 +171,7 @@ const TaskList = () => {
             <div className="flex space-x-2 justify-center items-center">
               <div className="bg-green-600 rounded-full w-3 h-3"></div>
               <div className="bg-red-600 rounded-full w-3 h-3"></div>
-              <div className=" bg-yellow-300 rounded-full w-3 h-3"></div>
+              <div className="bg-yellow-300 rounded-full w-3 h-3"></div>
             </div>
             <Plus className="text-black font-extrabold" size={32} />
           </button>
@@ -185,14 +184,10 @@ const TaskList = () => {
             >
               <div>
                 <h2 className="font-semibold text-black">{task.title}</h2>
-                <p>
-                  Start: {formatDateTime(task.start_time)} 
-                </p>
-                <p>
-                End: {formatDateTime(task.end_time)}
-                </p>
+                <p>Start: {formatDateTime(task.start_time)}</p>
+                <p>End: {formatDateTime(task.end_time)}</p>
                 <p>Priority: {task.priority}</p>
-                <p>Status: {task.status}</p> {/* Display status */}
+                <p>Status: {task.status}</p>
               </div>
               <div className="flex gap-2">
                 <button
@@ -202,7 +197,7 @@ const TaskList = () => {
                   <Edit2Icon />
                 </button>
                 <button
-                  onClick={() => deleteTask(task._id)} // Use task._id instead of task.id
+                  onClick={() => deleteTask(task._id)}
                   className="text-red-500 hover:underline"
                 >
                   <Trash size={32} />
@@ -240,7 +235,7 @@ const TaskList = () => {
                 name="start_time"
                 value={taskData.start_time}
                 onChange={handleChange}
-                className="w-full p-3 border  text-gray-600 bg-slate-100 rounded-lg focus:ring focus:ring-blue-300"
+                className="w-full p-3 border text-gray-600 bg-slate-100 rounded-lg focus:ring focus:ring-blue-300"
               />
 
               <input
@@ -248,7 +243,7 @@ const TaskList = () => {
                 name="end_time"
                 value={taskData.end_time}
                 onChange={handleChange}
-                className="w-full p-3 border  text-gray-600 bg-slate-100 rounded-lg focus:ring focus:ring-blue-300"
+                className="w-full p-3 border text-gray-600 bg-slate-100 rounded-lg focus:ring focus:ring-blue-300"
               />
 
               <input
@@ -257,10 +252,9 @@ const TaskList = () => {
                 placeholder="Priority (e.g., Low, Medium, High)"
                 value={taskData.priority}
                 onChange={handleChange}
-                className="w-full p-3 border  text-gray-600 bg-slate-100 rounded-lg focus:ring focus:ring-blue-300"
+                className="w-full p-3 border text-gray-600 bg-slate-100 rounded-lg focus:ring focus:ring-blue-300"
               />
 
-              {/* Status Dropdown */}
               <select
                 name="status"
                 value={taskData.status}
@@ -277,7 +271,7 @@ const TaskList = () => {
                 onClick={closeModal}
                 className="bg-gray-300 text-black px-5 py-2 rounded-lg hover:bg-gray-400 transition"
               >
-               <DeleteIcon/>
+                <DeleteIcon />
               </button>
 
               <button

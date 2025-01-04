@@ -12,7 +12,7 @@ export const initialState: AuthState = {
 
 type AuthAction =
   | { type: "LOGIN_START" }
-  | { type: "LOGIN_SUCCESS"; payload: { user: { name: string; email: string } } }
+  | { type: "LOGIN_SUCCESS"; payload: { user: { username: string; email: string } } }
   | { type: "LOGIN_FAILURE"; payload: string }
   | { type: "LOGOUT" };
 
@@ -21,7 +21,12 @@ const AuthReducer = (state = initialState, action: AuthAction): AuthState => {
     case "LOGIN_START":
       return { ...state, isFetching: true, error: false };
     case "LOGIN_SUCCESS":
-      return { ...state, user: action.payload.user, isFetching: false, error: false };
+      return {
+        ...state, user: {
+          username: action.payload.user.username,  // Set 'name' to 'username'
+          email: action.payload.user.email,
+        }, isFetching: false, error: false
+      };
     case "LOGIN_FAILURE":
       return { ...state, user: null, isFetching: false, error: action.payload };
     case "LOGOUT":

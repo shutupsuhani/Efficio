@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -9,7 +10,7 @@ const Register = () => {
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
+  const navigate=useNavigate();
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
@@ -30,7 +31,7 @@ const Register = () => {
 
     try {
       // Make the API request to register the user
-      const response = await fetch("http://localhost:3000/api/auth/signup", {
+      const response = await fetch("https://efficio-server.vercel.app/api/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -44,13 +45,16 @@ const Register = () => {
 
       const data = await response.json();
       console.log("Registration success:", data);
-
+      navigate('/login')
       // Redirect to login or show success message
       setError(null);
       setLoading(false);
-    } catch (error) {
-      setError(error.message);
-      setLoading(false);
+    } catch (error:unknown) {
+      if (error instanceof Error) {
+        setError(error.message); 
+      } else {
+        setError("An unknown error occurred");
+      }
     }
   };
 
@@ -59,7 +63,7 @@ const Register = () => {
       <div className="w-full max-w-md bg-white p-8 rounded-xl shadow-md">
         
        <div className="flex items-center justify-center ">
-          <img src="./logo2.png" width={100} height={100}/>
+          <img src="./logo2.png" alt="logo" width={100} height={100}/>
         </div>
         
         <h2 className="text-2xl text-blue-600 font-bold text-center mb-6">Register</h2>

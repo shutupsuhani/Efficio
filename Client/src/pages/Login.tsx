@@ -55,9 +55,12 @@ const Login = () => {
       setLoading(false);
       
       // Redirect or show success message
-    } catch (error) {
-      setError(error.message);
-      setLoading(false);
+    } catch (error:unknown) {
+      if (error instanceof Error) {
+        setError(error.message); // safely access error.message
+      } else {
+        setError("An unknown error occurred");
+      }
     }
   };
 
@@ -67,7 +70,7 @@ const Login = () => {
       <div className="w-full   max-w-md bg-white p-8 rounded-xl shadow-md">
         
         <div className="flex items-center justify-center ">
-          <img src="./logo2.png" width={100} height={100}/>
+          <img src="./logo2.png" alt="logo" width={100} height={100}/>
         </div>
         
         <h2 className="text-2xl text-blue-600 font-bold text-center mb-6">Login</h2>
@@ -112,7 +115,7 @@ const Login = () => {
               className={`w-full py-2 px-4 bg-blue-500  text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
               disabled={loading}
             >
-              {loading ? <div className="flex items-center"><Loader2Icon className="animate-spin"/></div> : "Login"}
+              {loading ? <div className="flex justify-center items-center"><Loader2Icon className="animate-spin"/></div> : "Login"}
             </button>
           </div>
         </form>

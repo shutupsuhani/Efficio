@@ -5,13 +5,19 @@ import "./index.css";
 import { AuthProvider } from "./context/AuthContext";
 import { Provider } from "./components/ui/provider";
 
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <Provider>
-      <AuthProvider>
-      <App />
-      </AuthProvider>
-    </Provider>
+// Get the root element
+const rootElement = document.getElementById("root");
 
-  </React.StrictMode>
-);
+if (rootElement) {
+  ReactDOM.createRoot(rootElement).render(
+    <React.StrictMode>
+      <Provider>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </Provider>
+    </React.StrictMode>
+  );
+} else {
+  console.error("Root element not found");
+}
