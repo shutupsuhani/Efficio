@@ -7,8 +7,6 @@ Efficio is a task management web application designed to streamline task allocat
 
 ->Task Management: Create, update, delete, and track tasks effortlessly.
 
-->File Uploads: Attach files to tasks and manage them efficiently.
-
 ->Responsive Design: Fully responsive UI for both desktop and mobile users.
 
 ->Protected Routes: Restrict access to authorized users only.
