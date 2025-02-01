@@ -21,7 +21,7 @@ app.use(cors({
     const allowedOrigins = [
       "https://efficio-task.vercel.app/",
       "http://localhost:5173",
-      "https://efficio-task.netlify.app/"
+      "https://efficio-task.netlify.app/",
     ];
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true); // Allow request
@@ -36,7 +36,7 @@ app.use(cors({
 
 
 // Routes
-app.use("/api/auth", userRouter); 
+app.use("/api/auth/", userRouter); 
 app.use("/api/file/",taskRouter);
 
 // Database connection
