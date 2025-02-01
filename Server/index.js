@@ -14,12 +14,11 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(cookieParser())
-//app.use(cors())
+app.use(cors())
 
 app.use(cors({
   origin: (origin, callback) => {
     const allowedOrigins = [
-      "https://efficio-task.vercel.app/",
       "http://localhost:5173",
       "https://efficio-task.netlify.app/",
     ];
