@@ -73,7 +73,7 @@ const Dashboard = () => {
   }, [navigate]);
 
   if (loading) {
-    return <div className="flex justify-center items-center"><Loader2Icon className="animate-spin"/></div>;
+    return <div className="flex mt-3 justify-center items-center"><img src="./lg.svg" alt="logo" className="animate-spin"/></div>;
   }
 
   if (error) {

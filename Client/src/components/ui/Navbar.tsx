@@ -49,7 +49,7 @@ const Navbar = () => {
         <Link to="/">
         <div className="flex items-center space-x-3">
   <img
-    src="./logo2.png"
+    src="./lg.svg"
     className="rounded-full"
     width={50}
     height={50}

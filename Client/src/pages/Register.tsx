@@ -63,7 +63,8 @@ const Register = () => {
       <div className="w-full max-w-md bg-white p-8 rounded-xl shadow-md">
         
        <div className="flex items-center justify-center ">
-          <img src="./logo2.png" alt="logo" width={100} height={100}/>
+          <img src="./lg.svg" alt="logo" width={30} height={30}/>
+          <p className="text-blue-600">Efficio</p> 
         </div>
         
         <h2 className="text-2xl text-blue-600 font-bold text-center mb-6">Register</h2>

@@ -212,6 +212,12 @@ const TaskList = () => {
       {modalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+            
+          <div className="flex items-center mb-3 gap-2 justify-center ">
+            <img src="./lg.svg" alt="logo" width={30} height={30}/>
+             <p className="text-blue-600">Efficio</p> 
+          </div>
+
             <h2 className="text-2xl font-semibold text-blue-600 mb-6 text-center">
               {isEditing ? "Edit Task" : "Add Task"}
             </h2>
