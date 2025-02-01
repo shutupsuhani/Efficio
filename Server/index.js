@@ -19,7 +19,7 @@ app.use(cors())
 app.use(cors({
   origin: (origin, callback) => {
     const allowedOrigins = [
-      "https://efficio-task.netlify.app",
+      "https://efficio-task.vercel.app/",
       "http://localhost:5173"
     ];
     if (!origin || allowedOrigins.includes(origin)) {
