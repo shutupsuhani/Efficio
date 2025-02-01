@@ -26,7 +26,7 @@ function App() {
       );
     }
 
-    return state.user ? Component : <Navigate to="/login" replace />;
+    return state.user ? Component : <Navigate to="/register" replace />;
   };
 
   return (
