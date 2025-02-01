@@ -1,4 +1,3 @@
-import { Loader2Icon, LoaderCircle } from "lucide-react";
 import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import Register from "./pages/Register";
@@ -6,6 +5,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import TaskList from "./pages/TaskList";
 import { useAuth } from "./context/AuthContext"; // Use your context
+import { LoaderCircle } from "lucide-react";
 
 function App() {
   const { state } = useAuth();
@@ -21,7 +21,7 @@ function App() {
     if (state.user === undefined) {
       return (
         <div className="flex justify-center items-center min-h-screen">
-          <Loader2Icon className="animate-spin text-blue-600 w-10 h-10" />
+          <img alt="logo" src="./lg.svg" className="animate-spin  w-10 h-10" />
         </div>
       );
     }

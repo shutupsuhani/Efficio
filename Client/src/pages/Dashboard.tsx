@@ -11,7 +11,7 @@ import {
   Legend,
 } from "chart.js";
 import { Button } from "@chakra-ui/react";
-import { House, Loader2Icon } from "lucide-react";
+import { House } from "lucide-react";
 
 
 // Register required Chart.js components
